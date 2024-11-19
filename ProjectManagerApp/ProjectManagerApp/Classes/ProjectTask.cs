@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagerApp.Classes
 {
-    public class Task
+    public class ProjectTask
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,7 +15,7 @@ namespace ProjectManagerApp.Classes
         public Status Status { get; set; }
         public int Duration { get; set; }
         public Project RelatedProject { get; set; }
-        public Task(string name, string description, DateTime deadline, Status status, int duration, Project relatedProject) {
+        public ProjectTask(string name, string description, DateTime deadline, Status status, int duration, Project relatedProject) {
             Name = name;
             Description = description;
             Deadline = deadline;
