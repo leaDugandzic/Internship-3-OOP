@@ -23,14 +23,5 @@ namespace ProjectManagerApp.Classes
             EndDate = endDate;
             Status = status;
         }
-
-        public void ShowProjectDetails()
-        {
-            Console.WriteLine($"Name: {Name}");
-            Console.WriteLine($"Description: {Description}");
-            Console.WriteLine($"Start Date: {StartDate.ToShortDateString()}");
-            Console.WriteLine($"End Date: {EndDate.ToShortDateString()}");
-            Console.WriteLine($"Status: {Status}");
-        }
     }
 }

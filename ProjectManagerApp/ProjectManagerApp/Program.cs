@@ -10,39 +10,47 @@ namespace ProjectManagerApp
             //menu 
             while (true)
             {
-                //InitializeProjectsAndTasks();
+                InitializeProjectsAndTasks();
 
-                Console.WriteLine("\nMain Menu:");
-                Console.WriteLine("1 Display all projects and tasks");
-                Console.WriteLine("2 Add a new project");
-                Console.WriteLine("3 Delete a project");
-                Console.WriteLine("4 Show tasks due in the next 7 days");
-                Console.WriteLine("5 Exit");
+                string menu = @"
+    Main Menu:
+    1 Display all projects and tasks
+    2 Add a new project
+    3 Delete a project
+    4 Show tasks due in the next 7 days
+    0 Exit";
+
+                Console.WriteLine(menu);
                 Console.Write("Select an option: ");
 
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
                 switch (choice)
                 {
+                    case "0":
+                        return;
                     case "1":
-                        //DisplayAll();
+                        Console.Clear();
+                        DislayAll();
                         break;
                     case "2":
+                        Console.Clear();
                         //AddNewProject();
                         break;
                     case "3":
+                        Console.Clear();
                         //DeleteProject();
                         break;
                     case "4":
+                        Console.Clear();
                         //ShowTasksForNext7Days();
                         break;
-                    case "5":
-                        Console.WriteLine("Exiting...");
-                        return;
                     default:
+                        Console.Clear();
                         Console.WriteLine("Invalid option, please try again.");
                         break;
                 }
+                //inicijalizacija podataka za projekte i zadatke
                 static void InitializeProjectsAndTasks()
                 {
                     Project websiteLaunch = new Project("Website Launch", "Launch the new company website", DateTime.Now, DateTime.Now.AddDays(60), Enum.Status.Active);
@@ -57,6 +65,18 @@ namespace ProjectManagerApp
 
                     projects[websiteLaunch] = new List<ProjectTask> { designPhase, contentCreation, testing };
                     projects[mobileApp] = new List<ProjectTask> { prototype, bugFixing };
+                }
+                //prikaz svih projekata
+                static void DislayAll()
+                {
+                    foreach (var project in projects)
+                    {
+                        Console.WriteLine($"Project: {project.Key.Name} ({project.Key.Status})");
+                        foreach (var task in project.Value)
+                        {
+                            Console.WriteLine($"  - Task: {task.Name} (Status: {task.Status}, Deadline: {task.Deadline.ToShortDateString()})");
+                        }
+                    }
                 }
             }
         }

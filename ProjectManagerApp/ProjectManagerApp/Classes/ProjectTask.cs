@@ -23,14 +23,5 @@ namespace ProjectManagerApp.Classes
             Duration = duration;
             RelatedProject = relatedProject;
         }
-        public void ShowProjectDetails()
-        {
-            Console.WriteLine($"Name: {Name}");
-            Console.WriteLine($"Description: {Description}");
-            Console.WriteLine($"Deadline: {Deadline.ToShortDateString()}");
-            Console.WriteLine($"Status: {Status}");
-            Console.WriteLine($"Duration: {Duration}");
-            Console.WriteLine($"Related Project: {RelatedProject}");
-        }
     }
 }
