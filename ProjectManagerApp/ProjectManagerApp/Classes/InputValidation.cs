@@ -56,7 +56,17 @@ namespace ProjectManagerApp.Classes
             }
         }
 
+        public static bool GetValidateDateRange(DateTime startDate, DateTime endDate)
+        {
+            if (endDate < startDate)
+            {
+                Console.WriteLine($"Invalid date range. End date ({endDate:yyyy-MM-dd}) cannot be earlier than start date ({startDate:yyyy-MM-dd}).");
+                return false;
+            }
 
+            return true; 
+        }
+        
         public static Status GetValidatedStatus(string prompt)
         {
             while (true)
@@ -74,7 +84,7 @@ namespace ProjectManagerApp.Classes
             while (true)
             {
                 Console.Write(prompt);
-                if (int.TryParse(Console.ReadLine(), out int result) && result > 0)
+                if (int.TryParse(Console.ReadLine(), out int result) && result >= 1)
                     return result;
 
                 Console.WriteLine("Invalid input. Please enter a positive number.");

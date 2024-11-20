@@ -84,54 +84,59 @@ namespace ProjectManagerApp
                 {
                     Console.WriteLine("\nAdding a new project...");
 
-                    // Validacija unosa za projekt
                     string name = InputValidator.GetValidatedString("Enter project name: ");
-                    string description = InputValidator.GetValidatedString("Enter project description: ");
-                    DateTime startDate = InputValidator.GetValidatedDate("Enter start date (yyyy-MM-dd): ");
-                    DateTime endDate = InputValidator.GetValidatedDate("Enter end date (yyyy-MM-dd): ");
-                    Status status = InputValidator.GetValidatedStatus("Enter status (Active, Paused, Completed): ");
 
-                    // Provjera za postojeći projekt s istim imenom
                     if (projects.Keys.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                     {
                         Console.WriteLine($"A project with the name '{name}' already exists. Cannot add duplicate projects.");
                         return;
                     }
 
+                    string description = InputValidator.GetValidatedString("Enter project description: ");
+                    DateTime startDate = InputValidator.GetValidatedDate("Enter start date (yyyy-MM-dd): ");
+                    DateTime endDate = InputValidator.GetValidatedDate("Enter end date (yyyy-MM-dd): ");
+                    InputValidator.GetValidateDateRange(startDate, endDate);
+                    Status status = InputValidator.GetValidatedStatus("Enter status (Active, Paused, Completed): ");
+
                     Project newProject = new Project(name, description, startDate, endDate, status);
                     projects[newProject] = new List<ProjectTask>();
                     Console.WriteLine($"Project '{name}' added successfully!");
 
-                    Console.WriteLine($"\nWould you like to add tasks to the project '{name}'? (yes/no): ");
-                    string addTasksChoice = Console.ReadLine();
-                    if (addTasksChoice.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    int addTasksChoice = InputValidator.GetValidatedNumber($"\nHow many tasks would you like to add in project '{name}'? ");
+                    
+                    for (int i = 1; i <= addTasksChoice; i++)
                     {
+                        Console.WriteLine($"Task {i} / {addTasksChoice}");
+                        string taskName = InputValidator.GetValidatedString("Enter task name: ");
+
+                        if (projects[newProject].Any(t => t.Name.Equals(taskName, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            Console.WriteLine($"A task with the name '{taskName}' already exists in project '{name}'. Cannot add duplicate tasks.");
+                            continue;
+                        }
+
+                        string taskDescription = InputValidator.GetValidatedString("Enter task description: ");
+                        DateTime taskDeadline;
+
                         while (true)
                         {
-                            string taskName = InputValidator.GetValidatedString("Enter task name: ");
-                            string taskDescription = InputValidator.GetValidatedString("Enter task description: ");
-                            DateTime taskDeadline = InputValidator.GetValidatedDate("Enter task deadline (yyyy-MM-dd): ");
-                            Status taskStatus = InputValidator.GetValidatedStatus("Enter task status (Active, Paused, Completed): ");
-                            int taskDuration = InputValidator.GetValidatedNumber("Enter task duration (in minutes): ");
-
-                            if (projects[newProject].Any(t => t.Name.Equals(taskName, StringComparison.OrdinalIgnoreCase)))
+                            taskDeadline = InputValidator.GetValidatedDate("Enter task deadline (yyyy-MM-dd): ");
+                            if (taskDeadline < startDate || taskDeadline > endDate)
                             {
-                                Console.WriteLine($"A task with the name '{taskName}' already exists in project '{name}'. Cannot add duplicate tasks.");
+                                Console.WriteLine($"Invalid deadline. The task deadline must be between the project's start date ({startDate:yyyy-MM-dd}) and end date ({endDate:yyyy-MM-dd}).");
                                 continue;
                             }
-
-                            ProjectTask newTask = new ProjectTask(taskName, taskDescription, taskDeadline, taskStatus, taskDuration, newProject);
-                            projects[newProject].Add(newTask);
-
-                            Console.WriteLine($"Task '{taskName}' added to project '{name}' successfully!");
-
-                            Console.WriteLine("Would you like to add another task? (yes/no): ");
-                            string continueAdding = Console.ReadLine();
-                            if (!continueAdding.Equals("yes", StringComparison.OrdinalIgnoreCase))
-                            {
-                                break;
-                            }
+                            break;
                         }
+
+                        Status taskStatus = InputValidator.GetValidatedStatus("Enter task status (Active, Paused, Completed): ");
+                        int taskDuration = InputValidator.GetValidatedNumber("Enter task duration (in minutes): ");
+
+                        ProjectTask newTask = new ProjectTask(taskName, taskDescription, taskDeadline, taskStatus, taskDuration, newProject);
+                        projects[newProject].Add(newTask);
+
+                        Console.WriteLine($"Task '{taskName}' added to project '{name}' successfully!");
+
                     }
 
                     Console.WriteLine($"\nProject '{name}' with tasks has been finalized.");
