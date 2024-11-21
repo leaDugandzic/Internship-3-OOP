@@ -31,6 +31,7 @@ Main Menu:
 3 Delete a project
 4 Show tasks due in the next 7 days
 5 Filter projects by status
+6 Manage project
 0 Exit";
 
                 Console.WriteLine(menu);
@@ -61,6 +62,10 @@ Main Menu:
                     case "5":
                         Console.Clear();
                         FilterProjectsByStatus();
+                        break;
+                    case "6":
+                        Console.Clear();
+                        ManageProject();
                         break;
                     default:
                         Console.Clear();
@@ -171,7 +176,7 @@ Main Menu:
 
                     Console.Write($"Are you sure you want to delete the project '{projectToDelete.Name}'? (y/n): ");
                     string confirmation = Console.ReadLine();
-                    
+
                     if (!confirmation.Equals("y", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.Clear();
@@ -221,6 +226,96 @@ Main Menu:
                         Console.WriteLine($"Invalid choice. Please try again.");
                     }
                 }
+
+                //manage projects function
+                static void ManageProject()
+                {
+                    foreach (var oneProject in projects)
+                    {
+                        Console.WriteLine($"Project: {oneProject.Key.Name} ({oneProject.Key.Status})");
+                    }
+                    Project project = null;
+
+                    //existing project validation
+                    while (project == null)
+                    {
+                        Console.Write("\nEnter the name of the project to manage: ");
+                        string name = InputValidator.GetValidatedString("Please enter a valid project name: ");
+
+                        project = projects.Keys.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+                        if (project == null)
+                        {
+                            Console.WriteLine("Project not found. Please try again.");
+                        }
+                    }
+                    Console.Clear();
+                    // manage project menu
+                    while (true)
+                    {
+                        string projectMenu = $@"
+Project Management Menu for '{project.Name}':
+1 Display all tasks
+2 Add a task
+3 Delete a task
+4 Update project status
+5 Show total duration of active tasks
+0 Back to main menu
+";
+                        Console.WriteLine(projectMenu);
+
+                        Console.Write("Select an option: ");
+                        string choice = Console.ReadLine();
+
+                        switch (choice)
+                        {
+                            case "0":
+                                Console.Clear();
+                                Console.WriteLine("Exiting manage project menu...");
+                                return;
+                            case "1":
+                                Console.Clear();
+                                DisplayAllTasks();
+                                break;
+                            case "2":
+                                Console.Clear();
+                                // Add a task logic here
+                                break;
+                            case "3":
+                                Console.Clear();
+                                // Delete a task logic here
+                                break;
+                            case "4":
+                                Console.Clear();
+                                // Update project status logic here
+                                break;
+                            case "5":
+                                Console.Clear();
+                                // Show total duration of active tasks logic here
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine("Invalid option, please try again.");
+                                break;
+                        }
+
+                        //function to display all tasks of the projects
+                        static void DisplayAllTasks()
+                        {
+                            foreach (var project in projects)
+                            {
+                                foreach (var task in project.Value)
+                                {
+                                    Console.WriteLine($"Task: {task.Name} (Project : {project.Key.Name}, Status: {task.Status}, Deadline: {task.Deadline.ToShortDateString()})");
+                                }
+                            }
+                        }
+
+
+
+                    }
+                }
+
             }
         }
     }
