@@ -55,14 +55,14 @@ Main Menu:
                         break;
                     case "4":
                         Console.Clear();
-                        //ShowTasksForNext7Days();
+                        ShowTasksForNext7Days();
                         break;
                     default:
                         Console.Clear();
                         Console.WriteLine("Invalid option, please try again.");
                         break;
                 }
-                //initialization of data for projects and tasks
+
                 //function for displaying all projects and their tasks
                 static void DislayAll()
                 {
@@ -178,8 +178,21 @@ Main Menu:
                     Console.WriteLine($"Project '{projectToDelete.Name}' deleted successfully.");
                 }
 
+                //function for showing tasks in next 7 days
+                static void ShowTasksForNext7Days()
+                {
+                    DateTime now = DateTime.Now;
+                    DateTime future = now.AddDays(7);
 
-
+                    Console.WriteLine("\nTasks due in the next 7 days:");
+                    foreach (var project in projects)
+                    {
+                        foreach (var task in project.Value.Where(t => t.Deadline >= now && t.Deadline <= future))
+                        {
+                            Console.WriteLine($"Task: {task.Name} (Project: {project.Key.Name}, Deadline: {task.Deadline:yyyy-MM-dd})");
+                        }
+                    }
+                }
             }
         }
     }
