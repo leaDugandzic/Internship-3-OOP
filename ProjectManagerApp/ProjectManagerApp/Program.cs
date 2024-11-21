@@ -256,10 +256,12 @@ Main Menu:
                         string projectMenu = $@"
 Project Management Menu for '{project.Name}':
 1 Display all tasks
-2 Add a task
-3 Delete a task
-4 Update project status
-5 Show total duration of active tasks
+2 Display project details 
+3 Update project status
+4 Add task
+5 Delete task from project
+6 Show total duration of active tasks
+7 Sort task ( from shortest to longest )
 0 Back to main menu
 ";
                         Console.WriteLine(projectMenu);
@@ -275,23 +277,11 @@ Project Management Menu for '{project.Name}':
                                 return;
                             case "1":
                                 Console.Clear();
-                                DisplayAllTasks();
+                                DisplayAllTasks(project);
                                 break;
                             case "2":
                                 Console.Clear();
-                                // Add a task logic here
-                                break;
-                            case "3":
-                                Console.Clear();
-                                // Delete a task logic here
-                                break;
-                            case "4":
-                                Console.Clear();
-                                // Update project status logic here
-                                break;
-                            case "5":
-                                Console.Clear();
-                                // Show total duration of active tasks logic here
+                                DisplayProjectDetails(project);
                                 break;
                             default:
                                 Console.Clear();
@@ -300,18 +290,26 @@ Project Management Menu for '{project.Name}':
                         }
 
                         //function to display all tasks of the projects
-                        static void DisplayAllTasks()
+                        static void DisplayAllTasks(Project project)
                         {
-                            foreach (var project in projects)
+                            Console.WriteLine($"\nTasks for project '{project.Name}':");
+                            foreach (var task in projects[project])  
                             {
-                                foreach (var task in project.Value)
-                                {
-                                    Console.WriteLine($"Task: {task.Name} (Project : {project.Key.Name}, Status: {task.Status}, Deadline: {task.Deadline.ToShortDateString()})");
-                                }
+                                Console.WriteLine($"- Task: {task.Name} (Status: {task.Status}, Deadline: {task.Deadline.ToShortDateString()})");
                             }
                         }
 
-
+                        //function to show project details
+                        static void DisplayProjectDetails(Project project)
+                        {
+                            Console.WriteLine($@"
+Project Details for '{project.Name}':
+Description: {project.Description}
+Start Date: {project.StartDate.ToShortDateString()}
+End Date: {project.EndDate.ToShortDateString()}
+Status: {project.Status}
+");
+                        }
 
                     }
                 }
