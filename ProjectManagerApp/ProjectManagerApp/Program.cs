@@ -30,6 +30,7 @@ Main Menu:
 2 Add a new project
 3 Delete a project
 4 Show tasks due in the next 7 days
+5 Filter projects by status
 0 Exit";
 
                 Console.WriteLine(menu);
@@ -56,6 +57,10 @@ Main Menu:
                     case "4":
                         Console.Clear();
                         ShowTasksForNext7Days();
+                        break;
+                    case "5":
+                        Console.Clear();
+                        FilterProjectsByStatus();
                         break;
                     default:
                         Console.Clear();
@@ -166,6 +171,7 @@ Main Menu:
 
                     Console.Write($"Are you sure you want to delete the project '{projectToDelete.Name}'? (y/n): ");
                     string confirmation = Console.ReadLine();
+                    
                     if (!confirmation.Equals("y", StringComparison.OrdinalIgnoreCase))
                     {
                         Console.Clear();
@@ -191,6 +197,28 @@ Main Menu:
                         {
                             Console.WriteLine($"Task: {task.Name} (Project: {project.Key.Name}, Deadline: {task.Deadline:yyyy-MM-dd})");
                         }
+                    }
+                }
+
+                //function for filtering projects by status
+                static void FilterProjectsByStatus()
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Select status to filter by: 1 - Active, 2 - Paused, 3 - Completed");
+                        int statusChoice;
+                        if (int.TryParse(Console.ReadLine(), out statusChoice) || statusChoice > 1 || statusChoice < 3)
+                        {
+                            Status status = (Status)(statusChoice - 1);
+
+                            foreach (var project in projects.Keys.Where(p => p.Status == status))
+                            {
+                                Console.WriteLine($"Project: {project.Name} ({project.Status})");
+                                return;
+                            }
+                        }
+                        Console.Clear();
+                        Console.WriteLine($"Invalid choice. Please try again.");
                     }
                 }
             }
