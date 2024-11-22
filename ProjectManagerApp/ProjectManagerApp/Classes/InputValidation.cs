@@ -94,7 +94,7 @@ namespace ProjectManagerApp.Classes
         {
             if (project.Status == Status.Completed)
             {
-                Console.WriteLine($"Project '{project.Name}' is already marked as Completed. You cannot change the status of a completed project.");
+                Console.WriteLine($"Project '{project.Name}' is already marked as Completed. You cannot change completed project.");
                 return true; 
             }
 
@@ -106,7 +106,7 @@ namespace ProjectManagerApp.Classes
                 return true; 
             }
 
-            return false; // Projekt nije završen
+            return false; 
         }
 
         public static void MarkAllTasksCompleted(Project project, Dictionary<Project, List<ProjectTask>> projects)

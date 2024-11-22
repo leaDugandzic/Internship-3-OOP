@@ -302,6 +302,10 @@ Project Management Menu for '{project.Name}':
                                 Console.Clear();
                                 AddTask(project);
                                 break;
+                            case "5":
+                                Console.Clear();
+                                DeleteTaskFromProject(project);
+                                break;
                             default:
                                 Console.Clear();
                                 Console.WriteLine("Invalid option, please try again.");
@@ -436,6 +440,47 @@ Select new status for the project:
                             Console.WriteLine($"Task '{taskName}' has been successfully added to project '{project.Name}'!");
                         }
 
+                        //function to delete a task from project
+                        static void DeleteTaskFromProject(Project project)
+                        {
+                            if (InputValidator.IsProjectCompleted(project, projects))
+                            {
+                                return;
+                            }
+
+                            Console.WriteLine($"Deleting a task from project '{project.Name}'");
+
+                            var tasks = projects[project];
+                            if (tasks.Count == 0)
+                            {
+                                Console.WriteLine($"Project '{project.Name}' has no tasks to delete.");
+                                return; 
+                            }
+
+                            Console.WriteLine("\nTasks:");
+                            for (int i = 0; i < tasks.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1} {tasks[i].Name} (Status: {tasks[i].Status}, Deadline: {tasks[i].Deadline:yyyy-MM-dd})");
+                            }
+
+                            int taskIndex;
+                            while (true)
+                            {
+                                taskIndex = InputValidator.GetValidatedNumber("Enter the number of the task to delete: ") - 1;
+
+                                if (taskIndex < tasks.Count)
+                                {
+                                    break; 
+                                }
+                                Console.WriteLine("Invalid choice. Please select a valid task number.");
+                            }
+
+                            ProjectTask taskToDelete = tasks[taskIndex];
+                            tasks.RemoveAt(taskIndex);
+
+                            Console.Clear();
+                            Console.WriteLine($"Task '{taskToDelete.Name}' has been successfully deleted from project '{project.Name}'.");
+                        }
                     }
                 }
 
