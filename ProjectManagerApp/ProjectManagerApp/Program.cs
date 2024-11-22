@@ -42,6 +42,7 @@ Main Menu:
 4 Show tasks due in the next 7 days
 5 Filter projects by status
 6 Manage project
+7 Manage task
 0 Exit";
 
                 Console.WriteLine(menu);
@@ -76,6 +77,10 @@ Main Menu:
                     case "6":
                         Console.Clear();
                         ManageProject();
+                        break;
+                    case "7":
+                        Console.Clear();
+                        ManageTask();
                         break;
                     default:
                         Console.Clear();
@@ -496,10 +501,90 @@ Select new status for the project:
                                 Console.WriteLine($"Project '{project.Name}' has no active tasks.");
                                 return;
                             }
-
                                 Console.WriteLine($"Total duration of active tasks in project '{project.Name}': {totalActiveDuration} minutes.");
                         }
 
+                    }
+                }
+
+                // function to manage a specific task
+                static void ManageTask()
+                {
+                    foreach (var oneProject in projects)
+                    {
+                        Console.WriteLine($"Project: {oneProject.Key.Name} ({oneProject.Key.Status})");
+                    }
+                    Project project = null;
+
+                    //existing project validation
+                    while (project == null)
+                    {
+                        string name = InputValidator.GetValidatedString("\nEnter the project name to manage tasks: ");
+
+                        project = projects.Keys.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+                        if (project == null)
+                        {
+                            Console.WriteLine("Project not found. Please try again.");
+                        }
+                    }
+
+                    Console.Clear();
+
+                    Console.WriteLine($"Managing tasks for project '{project.Name}'");
+
+                    var tasks = projects[project];
+                    Console.WriteLine("\nTasks:");
+                    for (int i = 0; i < tasks.Count; i++)
+                    {
+                        Console.WriteLine($" {i + 1} {tasks[i].Name} (Status: {tasks[i].Status}, Deadline: {tasks[i].Deadline:yyyy-MM-dd})");
+                    }
+
+                    int taskIndex;
+                    while (true)
+                    {
+                        taskIndex = InputValidator.GetValidatedNumber("Enter the number of the task to manage: ") - 1;
+
+                        if (taskIndex < tasks.Count)
+                        {
+                            break; 
+                        }
+                        Console.WriteLine("Invalid choice. Please select a valid task number.");
+                    }
+
+                    ProjectTask task = tasks[taskIndex];
+                    Console.Clear();
+
+                    while (true)
+                    {
+                        Console.WriteLine($@"
+Task Management Menu for '{task.Name}':
+1 Display task details
+2 Edit task status
+0 Back to main menu");
+
+                        Console.Write("Select an option: ");
+                        string choice = Console.ReadLine();
+
+                        switch (choice)
+                        {
+                            case "0":
+                                Console.Clear();
+                                Console.WriteLine("Exiting manage task menu...");
+                                return; 
+                            case "1":
+                                Console.Clear();
+                                //DisplayTaskDetails(task);
+                                break;
+                            case "2":
+                                Console.Clear();
+                                //EditTaskStatus(task);
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine("Invalid option. Please try again.");
+                                break;
+                        }
                     }
                 }
 
