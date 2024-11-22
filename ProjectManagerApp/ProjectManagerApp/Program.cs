@@ -239,8 +239,7 @@ Main Menu:
                     //existing project validation
                     while (project == null)
                     {
-                        Console.Write("\nEnter the name of the project to manage: ");
-                        string name = InputValidator.GetValidatedString("Please enter a valid project name: ");
+                        string name = InputValidator.GetValidatedString("\nEnter the name of the project to manage: ");
 
                         project = projects.Keys.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
@@ -249,7 +248,9 @@ Main Menu:
                             Console.WriteLine("Project not found. Please try again.");
                         }
                     }
+
                     Console.Clear();
+
                     // manage project menu
                     while (true)
                     {
@@ -283,6 +284,10 @@ Project Management Menu for '{project.Name}':
                                 Console.Clear();
                                 DisplayProjectDetails(project);
                                 break;
+                            case "3":
+                                Console.Clear();
+                                UpdateProjectStatus(project);
+                                break;
                             default:
                                 Console.Clear();
                                 Console.WriteLine("Invalid option, please try again.");
@@ -293,7 +298,7 @@ Project Management Menu for '{project.Name}':
                         static void DisplayAllTasks(Project project)
                         {
                             Console.WriteLine($"\nTasks for project '{project.Name}':");
-                            foreach (var task in projects[project])  
+                            foreach (var task in projects[project])
                             {
                                 Console.WriteLine($"- Task: {task.Name} (Status: {task.Status}, Deadline: {task.Deadline.ToShortDateString()})");
                             }
@@ -309,6 +314,35 @@ Start Date: {project.StartDate.ToShortDateString()}
 End Date: {project.EndDate.ToShortDateString()}
 Status: {project.Status}
 ");
+                        }
+
+                        // function to change project status
+                        static void UpdateProjectStatus(Project project)
+                        {
+                            Console.WriteLine($@"
+Current status of project '{project.Name}': {project.Status}
+
+Select new status for the project:
+1 - Active
+2 - Paused
+3 - Completed
+");
+                            while (true)
+                            {
+                                int statusChoice = InputValidator.GetValidatedNumber("Enter your choice: ");
+
+                                if (statusChoice <= 3)
+                                {
+                                    project.Status = (Status)(statusChoice - 1);
+                                    Console.Clear();
+                                    Console.WriteLine($"Project '{project.Name}' status successfully updated to '{project.Status}'.");
+                                    return;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid input. The choice must be between 1 and 3.");
+                                }
+                            }
                         }
 
                     }
