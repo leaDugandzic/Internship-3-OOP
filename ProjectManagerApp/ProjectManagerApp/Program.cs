@@ -355,8 +355,7 @@ Current status of project '{project.Name}': {project.Status}
 Select new status for the project:
 1 - Active
 2 - Paused
-3 - Completed
-");
+3 - Completed");
 
                             while (true)
                             {
@@ -382,7 +381,6 @@ Select new status for the project:
                                 }
                             }
                         }
-
 
                         // function to add a task to a project
                         static void AddTask(Project project)
@@ -503,7 +501,6 @@ Select new status for the project:
                             }
                                 Console.WriteLine($"Total duration of active tasks in project '{project.Name}': {totalActiveDuration} minutes.");
                         }
-
                     }
                 }
 
@@ -574,11 +571,11 @@ Task Management Menu for '{task.Name}':
                                 return; 
                             case "1":
                                 Console.Clear();
-                                //DisplayTaskDetails(task);
+                                DisplayTaskDetails(task);
                                 break;
                             case "2":
                                 Console.Clear();
-                                //EditTaskStatus(task);
+                                UpdateTaskStatus(task);
                                 break;
                             default:
                                 Console.Clear();
@@ -586,6 +583,53 @@ Task Management Menu for '{task.Name}':
                                 break;
                         }
                     }
+
+                    //function to display task details
+                    static void DisplayTaskDetails(ProjectTask task)
+                    {
+                        Console.WriteLine($@"
+Task Details:
+Name: {task.Name}
+Description: {task.Description}
+Deadline: {task.Deadline:yyyy-MM-dd}
+Status: {task.Status}
+Duration: {task.Duration} minutes
+");
+                    }
+
+                    //function to update task status
+                    static void UpdateTaskStatus(ProjectTask task)
+                    {
+                        if (task.Status == Status.Completed) {
+                            Console.WriteLine($"Task {task.Name} is already marked as Completed. You cannot change completed task.");
+                            return;
+                        }
+                        Console.WriteLine($@"
+Current status of task '{task.Name}': {task.Status}
+
+Select new status for the task:
+1 - Active
+2 - Paused
+3 - Completed");
+
+                        while (true)
+                        {
+                            int statusChoice = InputValidator.GetValidatedNumber("Enter your choice: ");
+
+                            if (statusChoice <= 3)
+                            {
+                                task.Status = (Status)(statusChoice - 1);
+                                Console.Clear();
+                                Console.WriteLine($"Task '{task.Name}' status successfully updated to '{task.Status}'.");
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid input. The choice must be between 1 and 3.");
+                            }
+                        }
+                    }
+
                 }
 
             }
