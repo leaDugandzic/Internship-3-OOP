@@ -32,7 +32,6 @@ namespace ProjectManagerApp.Classes
             }
         }
 
-
         public static DateTime GetValidatedDate(string prompt)
         {
             while (true)
@@ -89,6 +88,34 @@ namespace ProjectManagerApp.Classes
 
                 Console.WriteLine("Invalid input. Please enter a positive number.");
             }
+        }
+
+        public static bool IsProjectCompleted(Project project, Dictionary<Project, List<ProjectTask>> projects)
+        {
+            if (project.Status == Status.Completed)
+            {
+                Console.WriteLine($"Project '{project.Name}' is already marked as Completed. You cannot change the status of a completed project.");
+                return true; 
+            }
+
+            bool allTasksCompleted = projects[project].All(task => task.Status == Status.Completed);
+            if (allTasksCompleted)
+            {
+                project.Status = Status.Completed; 
+                Console.WriteLine($"All tasks for project '{project.Name}' are completed. Project status automatically updated to 'Completed'.");
+                return true; 
+            }
+
+            return false; // Projekt nije završen
+        }
+
+        public static void MarkAllTasksCompleted(Project project, Dictionary<Project, List<ProjectTask>> projects)
+        {
+            foreach (var task in projects[project])
+            {
+                task.Status = Status.Completed;
+            }
+            Console.WriteLine($"All tasks for project '{project.Name}' have been marked as Completed.");
         }
 
     }
