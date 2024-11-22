@@ -156,9 +156,7 @@ Main Menu:
 
                         Console.Clear();
                         Console.WriteLine($"Task '{taskName}' added to project '{name}' successfully!");
-
                     }
-
                     Console.WriteLine($"\nProject '{name}' with tasks has been finalized.");
                 }
 
@@ -272,7 +270,6 @@ Project Management Menu for '{project.Name}':
 4 Add task
 5 Delete task from project
 6 Show total duration of active tasks
-7 Sort task ( from shortest to longest )
 0 Back to main menu
 ";
                         Console.WriteLine(projectMenu);
@@ -306,6 +303,11 @@ Project Management Menu for '{project.Name}':
                                 Console.Clear();
                                 DeleteTaskFromProject(project);
                                 break;
+                            case "6":
+                                Console.Clear();
+                                ShowTotalDurationOfActiveTasks(project);
+                                break;
+
                             default:
                                 Console.Clear();
                                 Console.WriteLine("Invalid option, please try again.");
@@ -481,6 +483,23 @@ Select new status for the project:
                             Console.Clear();
                             Console.WriteLine($"Task '{taskToDelete.Name}' has been successfully deleted from project '{project.Name}'.");
                         }
+
+                        // function to show total duration of active tasks in a project
+                        static void ShowTotalDurationOfActiveTasks(Project project)
+                        {
+                            int totalActiveDuration = projects[project]
+                                .Where(task => task.Status == Status.Active)
+                                .Sum(task => task.Duration);
+
+                            if (totalActiveDuration == 0)
+                            {
+                                Console.WriteLine($"Project '{project.Name}' has no active tasks.");
+                                return;
+                            }
+
+                                Console.WriteLine($"Total duration of active tasks in project '{project.Name}': {totalActiveDuration} minutes.");
+                        }
+
                     }
                 }
 
